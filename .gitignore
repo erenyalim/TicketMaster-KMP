@@ -1,0 +1,38 @@
+# Android Studio / IntelliJ IDEA
+*.iml
+.idea/
+.kotlin/
+local.properties
+captures/
+
+# Gradle / Build
+.gradle/
+**/build/
+!src/**/build/
+
+# iOS / Xcode
+xcuserdata/
+.DS_Store
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# C/C++ Native
+.externalNativeBuild/
+.cxx/
+
+# Web / Node
+node_modules/
+.npm/
+
+# Keystore
+*.jks
+*.keystore
+key.properties
+
+# Google Services
+google-services.json
+GoogleService-Info.plist

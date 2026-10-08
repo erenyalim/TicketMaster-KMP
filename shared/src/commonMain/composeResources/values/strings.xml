@@ -1,0 +1,104 @@
+<resources>
+    <string name ="search_hint">Event, artist or place</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="get_ticket">Get Ticket</string>
+    <string name="starting_price">Starting from $%1$s</string>
+
+    <string name="profile_account_settings">Account Settings</string>
+    <string name="profile_personal_info">Personal Information</string>
+    <string name="profile_payment_methods">Payment Methods</string>
+    <string name="profile_notifications">Notification Settings</string>
+    <string name="profile_help_support">Help &amp; Support</string>
+    <string name="profile_help_center">Help Center</string>
+    <string name="profile_privacy_policy">Privacy Policy</string>
+    <string name="profile_account_management">Account Management</string>
+    <string name="profile_logout">Logout</string>
+    <string name="profile_delete_account">Delete Account</string>
+    <string name="profile_my_tickets">My Tickets</string>
+    <string name="profile_favorites">Favorites</string>
+    <string name="profile_history">History</string>
+    <string name="profile_language_toggle">EN</string>
+
+    <string name="home_location">Current Location</string>
+    <string name="home_location_value">New York, USA</string>
+    <string name="home_featured">Featured</string>
+    <string name="home_event_title_format">Event Title %1$s</string>
+    <string name="home_featured_events">Featured Events</string>
+    <string name="filter_title">Filters</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_category">Category</string>
+    <string name="filter_date_today">Today</string>
+    <string name="filter_date_tomorrow">Tomorrow</string>
+    <string name="filter_date_this_week">This Week</string>
+    <string name="filter_date_this_month">This Month</string>
+    <string name="filter_cat_music">Music</string>
+    <string name="filter_cat_sports">Sports</string>
+    <string name="filter_cat_arts">Arts &amp; Theatre</string>
+    <string name="filter_cat_family">Family</string>
+    <string name="filter_cat_comedy">Comedy</string>
+
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_forgot_password">Forgot password?</string>
+    <string name="login_button">Sign In</string>
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_register">Register</string>
+
+    <string name="register_personal_title">Let\'s get to know you</string>
+    <string name="register_personal_step">Step 1 of 3</string>
+    <string name="register_first_name">First Name</string>
+    <string name="register_last_name">Last Name</string>
+    <string name="register_next_step">Next Step →</string>
+    <string name="register_have_account">Already have an account? </string>
+    <string name="register_sign_in">Sign In</string>
+
+    <string name="register_contact_title">How can we reach you?</string>
+    <string name="register_contact_step">Step 2 of 3</string>
+    <string name="register_email">Email Address</string>
+    <string name="register_phone">Phone Number (Optional)</string>
+
+    <string name="register_security_title">Secure your account</string>
+    <string name="register_security_step">Step 3 of 3</string>
+    <string name="register_password_rule">Must be at least 8 characters long.</string>
+    <string name="register_create_account">Create Account</string>
+
+    <string name="register_step_personal">PERSONAL</string>
+    <string name="register_step_contact">CONTACT</string>
+    <string name="register_step_security">SECURITY</string>
+
+    <string name="event_total_price">Total Price</string>
+    <string name="event_buy_ticket">Buy Ticket</string>
+    <string name="event_seller_format">Seller : %1$s</string>
+    <string name="event_view_map">View on Map</string>
+    <string name="event_friends_attending">Friends Attending</string>
+    <string name="event_ticket_types">Ticket Types</string>
+
+    <string name="notifications_title">Notifications</string>
+    <string name="notifications_ticket_purchase">Ticket Purchase</string>
+    <string name="notifications_reminder">Reminder</string>
+    <string name="notifications_promo">Promo</string>
+
+    <string name="profile_edit_profile">Edit Profile</string>
+    <string name="profile_badges">Badges</string>
+
+    <string name="profile_sec_account">Account &amp; Security</string>
+    <string name="profile_contact_info">Contact Info (Verified)</string>
+    <string name="profile_change_password">Change Password</string>
+    <string name="profile_2fa">Two-Factor Authentication</string>
+    <string name="profile_active_sessions">Active Sessions &amp; Devices</string>
+
+    <string name="profile_sec_payment">Payment &amp; Billing</string>
+    <string name="profile_saved_cards">Saved Cards</string>
+    <string name="profile_billing_info">Billing Information</string>
+    <string name="profile_payment_history">Payment History &amp; Invoices</string>
+
+    <string name="profile_sec_preferences">Preferences</string>
+    <string name="profile_theme">Theme (Light/Dark)</string>
+
+    <string name="profile_sec_support">Support &amp; Legal</string>
+    <string name="profile_report_issue">Report an Issue</string>
+    <string name="profile_terms">Terms of Service</string>
+
+    <string name="profile_sec_data">Data &amp; Privacy (KVKK)</string>
+    <string name="profile_download_data">Download My Data</string>
+</resources>

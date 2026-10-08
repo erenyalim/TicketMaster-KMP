@@ -1,0 +1,106 @@
+<resources>
+    <string name="explore_title">En iyi etkinlikleri\nkeşfet</string>
+    <string name="search_hint">Etkinlik ara...</string>
+    <string name="apply_filters">Filtreleri Uygula</string>
+    <string name="get_ticket">Bilet Al</string>
+    <string name="starting_price">%1$s₺\'den başlayan fiyatlarla</string>
+
+    <string name="profile_account_settings">Hesap Ayarları</string>
+    <string name="profile_personal_info">Kişisel Bilgiler</string>
+    <string name="profile_payment_methods">Ödeme Yöntemleri</string>
+    <string name="profile_notifications">Bildirim Ayarları</string>
+    <string name="profile_help_support">Yardım &amp; Destek</string>
+    <string name="profile_help_center">Yardım Merkezi</string>
+    <string name="profile_privacy_policy">Gizlilik Politikası</string>
+    <string name="profile_account_management">Hesap Yönetimi</string>
+    <string name="profile_logout">Çıkış Yap</string>
+    <string name="profile_delete_account">Hesabımı Sil</string>
+    <string name="profile_my_tickets">Biletlerim</string>
+    <string name="profile_favorites">Favorilerim</string>
+    <string name="profile_history">Geçmiş</string>
+    <string name="profile_language_toggle">TR</string>
+
+    <string name="home_location">Mevcut Konum</string>
+    <string name="home_location_value">İstanbul, TR</string>
+    <string name="home_featured">Öne Çıkanlar</string>
+    <string name="home_event_title_format">Etkinlik Başlığı %1$s</string>
+    <string name="home_featured_events">Öne Çıkan Etkinlikler</string>
+
+    <string name="filter_title">Filtreler</string>
+    <string name="filter_date">Tarih</string>
+    <string name="filter_category">Kategori</string>
+    <string name="filter_date_today">Bugün</string>
+    <string name="filter_date_tomorrow">Yarın</string>
+    <string name="filter_date_this_week">Bu Hafta</string>
+    <string name="filter_date_this_month">Bu Ay</string>
+    <string name="filter_cat_music">Müzik</string>
+    <string name="filter_cat_sports">Spor</string>
+    <string name="filter_cat_arts">Sanat &amp; Tiyatro</string>
+    <string name="filter_cat_family">Aile</string>
+    <string name="filter_cat_comedy">Komedi</string>
+
+    <string name="login_email_hint">E-posta</string>
+    <string name="login_password_hint">Şifre</string>
+    <string name="login_forgot_password">Şifremi Unuttum?</string>
+    <string name="login_button">Giriş Yap</string>
+    <string name="login_no_account">Hesabınız yok mu? </string>
+    <string name="login_register">Kayıt Ol</string>
+
+    <string name="register_personal_title">Seni tanıyalım</string>
+    <string name="register_personal_step">Adım 1 / 3</string>
+    <string name="register_first_name">Ad</string>
+    <string name="register_last_name">Soyad</string>
+    <string name="register_next_step">Sonraki Adım →</string>
+    <string name="register_have_account">Zaten bir hesabın var mı? </string>
+    <string name="register_sign_in">Giriş Yap</string>
+
+    <string name="register_contact_title">Sana nasıl ulaşabiliriz?</string>
+    <string name="register_contact_step">Adım 2 / 3</string>
+    <string name="register_email">E-posta Adresi</string>
+    <string name="register_phone">Telefon Numarası (Opsiyonel)</string>
+
+    <string name="register_security_title">Hesabını güvenceye al</string>
+    <string name="register_security_step">Adım 3 / 3</string>
+    <string name="register_password_rule">En az 8 karakter uzunluğunda olmalıdır.</string>
+    <string name="register_create_account">Hesap Oluştur</string>
+
+    <string name="register_step_personal">KİŞİSEL</string>
+    <string name="register_step_contact">İLETİŞİM</string>
+    <string name="register_step_security">GÜVENLİK</string>
+
+    <string name="event_total_price">Toplam Fiyat</string>
+    <string name="event_buy_ticket">Bilet Al</string>
+    <string name="event_seller_format">Satıcı : %1$s</string>
+    <string name="event_view_map">Haritada Gör</string>
+    <string name="event_friends_attending">Katılan Arkadaşların</string>
+    <string name="event_ticket_types">Bilet Türleri</string>
+
+    <string name="notifications_title">Bildirimler</string>
+    <string name="notifications_ticket_purchase">Bilet Alımı</string>
+    <string name="notifications_reminder">Hatırlatıcı</string>
+    <string name="notifications_promo">Kampanya</string>
+
+    <string name="profile_edit_profile">Profili Düzenle</string>
+    <string name="profile_badges">Rozetler</string>
+
+    <string name="profile_sec_account">Hesap ve Güvenlik</string>
+    <string name="profile_contact_info">İletişim Bilgileri (Onaylı)</string>
+    <string name="profile_change_password">Şifre Değiştir</string>
+    <string name="profile_2fa">İki Adımlı Doğrulama (2FA)</string>
+    <string name="profile_active_sessions">Aktif Oturumlar ve Cihazlar</string>
+
+    <string name="profile_sec_payment">Ödeme ve Faturalandırma</string>
+    <string name="profile_saved_cards">Kayıtlı Kartlar</string>
+    <string name="profile_billing_info">Fatura Bilgileri</string>
+    <string name="profile_payment_history">Ödeme Geçmişi ve Faturalar</string>
+
+    <string name="profile_sec_preferences">Tercihler</string>
+    <string name="profile_theme">Tema (Açık/Koyu)</string>
+
+    <string name="profile_sec_support">Destek ve Yasal</string>
+    <string name="profile_report_issue">Sorun Bildir</string>
+    <string name="profile_terms">Kullanım Şartları</string>
+
+    <string name="profile_sec_data">Veri ve Hesap (KVKK)</string>
+    <string name="profile_download_data">Verilerimi İndir</string>
+</resources>
