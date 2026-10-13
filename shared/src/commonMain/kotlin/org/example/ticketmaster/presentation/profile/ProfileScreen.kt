@@ -46,7 +46,7 @@ fun ProfileScreen() {
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        // 1. Kullanıcı Kimliği Kartı (Header)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -87,7 +87,6 @@ fun ProfileScreen() {
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 
-                // Profili Düzenle Butonu
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
@@ -107,7 +106,6 @@ fun ProfileScreen() {
                 }
             }
 
-            // Dil Seçimi
             Box(
                 modifier = Modifier
                     .size(40.dp)
@@ -125,7 +123,6 @@ fun ProfileScreen() {
             }
         }
 
-        // 2. Çekirdek Aksiyonlar (Koleksiyon & Biletler)
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -147,7 +144,6 @@ fun ProfileScreen() {
             )
         }
 
-        // 3. Hesap ve Güvenlik
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_account),
@@ -170,7 +166,6 @@ fun ProfileScreen() {
             }
         }
 
-        // 4. Ödeme ve Faturalandırma
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_payment),
@@ -192,7 +187,6 @@ fun ProfileScreen() {
             }
         }
         
-        // 5. Tercihler (Bildirim, Tema)
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_preferences),
@@ -213,7 +207,6 @@ fun ProfileScreen() {
             }
         }
 
-        // 6. Destek ve Yasal
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_support),
@@ -236,7 +229,6 @@ fun ProfileScreen() {
             }
         }
 
-        // 7. Veri ve KVKK (Tehlikeli Bölge)
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_data),
@@ -273,10 +265,6 @@ fun ProfileScreen() {
         Spacer(modifier = Modifier.height(20.dp))
     }
 }
-
-// -------------------------------------------------------------------------
-// COMPONENT YARDIMCILARI
-// -------------------------------------------------------------------------
 
 @Composable
 private fun ProfileCoreActionCard(

@@ -45,7 +45,7 @@ fun HomeScreen(
     onSearchTextChanged: (String) -> Unit,
     onExploreClicked: () -> Unit,
     onNotificationsClicked: () -> Unit,
-    onEventClick: () -> Unit
+    onEventClick: (org.example.ticketmaster.domain.model.Event) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val darkBackground = Color(0xFF14171D)
@@ -93,14 +93,15 @@ fun HomeScreen(
     ) {
         Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
+        Box(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            contentAlignment = Alignment.Center
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { }
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .clickable { }
             ) {
                 Icon(
                     imageVector = Icons.Default.Place,
@@ -127,7 +128,9 @@ fun HomeScreen(
             Image(
                 painter = painterResource(Res.drawable.tm_logo),
                 contentDescription = null,
-                modifier = Modifier.height(20.dp)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .height(20.dp)
             )
 
             Box(
@@ -135,6 +138,7 @@ fun HomeScreen(
                     .size(36.dp)
                     .clip(CircleShape)
                     .background(Color(0xFF1C2129))
+                    .align(Alignment.CenterEnd)
                     .clickable { onNotificationsClicked() },
                 contentAlignment = Alignment.Center
             ) {

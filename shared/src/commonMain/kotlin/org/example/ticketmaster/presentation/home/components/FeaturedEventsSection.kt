@@ -15,7 +15,7 @@ import ticketmaster.shared.generated.resources.*
 @Composable
 fun FeaturedEventsSection(
     events: List<Event>,
-    onEventClick: () -> Unit
+    onEventClick: (Event) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(

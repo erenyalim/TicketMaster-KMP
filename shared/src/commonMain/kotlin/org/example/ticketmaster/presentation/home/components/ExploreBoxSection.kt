@@ -41,7 +41,6 @@ fun ExploreBoxSection(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Search Bar
                 Box(
                     modifier = Modifier
                         .weight(1f)
@@ -69,7 +68,6 @@ fun ExploreBoxSection(
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // Filter Button
                 Box(
                     modifier = Modifier
                         .size(48.dp)

@@ -12,9 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.SubcomposeAsyncImage
 import org.jetbrains.compose.resources.stringResource
 import ticketmaster.shared.generated.resources.*
 
@@ -45,6 +47,7 @@ fun BannerSection(
             pageSpacing = 16.dp,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
+            val bannerUrl = banners[page]
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -52,25 +55,12 @@ fun BannerSection(
                     .clip(RoundedCornerShape(20.dp))
                     .background(searchBoxBackground)
             ) {
-                // TODO: Dinamik görsel eklenecek
-                Text(
-                    text = banners[page],
-                    color = Color.Gray,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomStart)
-                        .background(Color.Black.copy(alpha = 0.6f))
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                ) {
-                    Text(
-                        text = stringResource(Res.string.home_event_title_format, page.toString()),
-                        color = Color.White,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
+                if (bannerUrl.isNotBlank()) {
+                    SubcomposeAsyncImage(
+                        model = bannerUrl,
+                        contentDescription = "Banner $page",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }

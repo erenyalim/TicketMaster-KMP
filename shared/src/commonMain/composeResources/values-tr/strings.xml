@@ -3,7 +3,7 @@
     <string name="search_hint">Etkinlik ara...</string>
     <string name="apply_filters">Filtreleri Uygula</string>
     <string name="get_ticket">Bilet Al</string>
-    <string name="starting_price">%1$s₺\'den başlayan fiyatlarla</string>
+    <string name="starting_price">$%1$s\'den başlayan fiyatlarla</string>
 
     <string name="profile_account_settings">Hesap Ayarları</string>
     <string name="profile_personal_info">Kişisel Bilgiler</string>
@@ -74,6 +74,7 @@
     <string name="event_view_map">Haritada Gör</string>
     <string name="event_friends_attending">Katılan Arkadaşların</string>
     <string name="event_ticket_types">Bilet Türleri</string>
+    <string name="event_tickets">Biletler</string>
 
     <string name="notifications_title">Bildirimler</string>
     <string name="notifications_ticket_purchase">Bilet Alımı</string>

@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.example.ticketmaster.di.appModule
 import org.example.ticketmaster.presentation.detail.EventDetailScreen
 import org.example.ticketmaster.presentation.login.LoginScreen
 import org.example.ticketmaster.presentation.login.LoginViewModel
@@ -16,35 +15,57 @@ import org.example.ticketmaster.presentation.register.RegisterScreen
 import org.example.ticketmaster.presentation.register.RegisterViewModel
 import org.example.ticketmaster.presentation.notifications.NotificationsScreen
 import org.koin.compose.getKoin
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.network.ktor3.KtorNetworkFetcherFactory
 
 
 @Composable
 fun App() {
+    setSingletonImageLoaderFactory { context ->
+        ImageLoader.Builder(context)
+            .components {
+                add(KtorNetworkFetcherFactory())
+            }
+            .build()
+    }
+
     MaterialTheme {
-            val navController = rememberNavController()
+        val navController = rememberNavController()
+        var selectedEvent by remember { mutableStateOf<org.example.ticketmaster.domain.model.Event?>(null) }
 
+        NavHost(
+            navController = navController,
+            startDestination = "main"
+        ) {
+            composable("main") {
+                MainScreen(
+                    onNavigateToNotifications = {
+                        navController.navigate("notifications")
+                    },
+                    onEventClick = { event ->
+                        selectedEvent = event
+                        navController.navigate("event_detail")
+                    }
+                )
+            }
+            composable("event_detail") {
+                val koin = getKoin()
+                val eventDetailViewModel = viewModel { koin.get<org.example.ticketmaster.presentation.detail.EventDetailViewModel>() }
 
-            NavHost(
-                navController = navController,
-                startDestination = "main"
-            ) {
-                composable("main") {
-                    MainScreen(
-                        onNavigateToNotifications = {
-                            navController.navigate("notifications")
-                        },
-                        onEventClick = {
-                            navController.navigate("event_detail")
-                        }
-                    )
+                LaunchedEffect(selectedEvent) {
+                    eventDetailViewModel.setEvent(selectedEvent)
                 }
-                composable("event_detail") {
-                    EventDetailScreen(
-                        onBackClick = {
-                            navController.popBackStack()
-                        }
-                    )
-                }
+
+                val detailUiState by eventDetailViewModel.uiState.collectAsState()
+
+                EventDetailScreen(
+                    uiState = detailUiState,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
                 composable("notifications") {
                     NotificationsScreen(
                         notifications = emptyList(), // TODO: Bu listeyi NotificationViewModel'dan çekilecek

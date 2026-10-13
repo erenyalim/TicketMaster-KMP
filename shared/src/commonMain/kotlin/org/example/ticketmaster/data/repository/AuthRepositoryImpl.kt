@@ -7,10 +7,9 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-import org.example.ticketmaster.data.remote.dto.Login.LoginRequest
-import org.example.ticketmaster.data.remote.dto.Login.LoginResponse
+import org.example.ticketmaster.data.remote.dto.login.LoginRequest
+import org.example.ticketmaster.data.remote.dto.login.LoginResponse
 import org.example.ticketmaster.data.remote.dto.RegisterRequest
-import org.example.ticketmaster.data.remote.dto.RegisterResponse
 import org.example.ticketmaster.domain.model.AuthToken
 import org.example.ticketmaster.domain.repository.AuthRepository
 

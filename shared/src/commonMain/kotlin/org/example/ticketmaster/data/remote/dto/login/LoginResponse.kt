@@ -1,4 +1,4 @@
-package org.example.ticketmaster.data.remote.dto.Login
+package org.example.ticketmaster.data.remote.dto.login
 
 import kotlinx.serialization.Serializable
 

@@ -18,53 +18,66 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.SubcomposeAsyncImage
 import org.jetbrains.compose.resources.stringResource
 import ticketmaster.shared.generated.resources.*
 
 @Composable
 fun EventDetailScreen(
+    uiState: EventDetailUiState = EventDetailUiState(),
     onBackClick: () -> Unit
 ) {
+    val event = uiState.event
+    val dynamicTicketTypes = uiState.ticketTypes.ifEmpty { event?.ticketTypes ?: emptyList() }
     val darkBackground = Color(0xFF14171D)
     val surfaceColor = Color(0xFF1C2129)
     val cyanAccent = Color(0xFF00E5FF)
     val textGray = Color(0xFFA0A4AB)
 
+    val minPrice = dynamicTicketTypes.minOfOrNull { it.price } ?: event?.startingPrice ?: 0.0
+    val startingPriceText = if (minPrice > 0) {
+        if (minPrice % 1.0 == 0.0) "$${minPrice.toInt()}" else "$$minPrice"
+    } else {
+        ""
+    }
+
     Scaffold(
         containerColor = darkBackground,
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(surfaceColor)
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
-                    .navigationBarsPadding()
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+            if (startingPriceText.isNotBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(surfaceColor)
+                        .padding(horizontal = 24.dp, vertical = 16.dp)
+                        .navigationBarsPadding()
                 ) {
-                    Column {
-                        Text(stringResource(Res.string.event_total_price), color = textGray, fontSize = 12.sp)
-                        Text("$120.00", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                    }
-                    Button(
-                        onClick = { /*Bilet Alma*/ },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2A3140)),
-                        shape = RoundedCornerShape(20.dp),
-                        modifier = Modifier
-                            .height(56.dp)
-                            .width(160.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(stringResource(Res.string.event_buy_ticket),
-                            color = darkBackground,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold)
+                        Column {
+                            Text(stringResource(Res.string.event_total_price), color = textGray, fontSize = 12.sp)
+                            Text(startingPriceText, color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                        }
+                        Button(
+                            onClick = { /*Bilet Alma*/ },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2A3140)),
+                            shape = RoundedCornerShape(20.dp),
+                            modifier = Modifier
+                                .height(56.dp)
+                                .width(160.dp)
+                        ) {
+                            Text(stringResource(Res.string.event_buy_ticket),
+                                color = darkBackground,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold)
+                        }
                     }
                 }
             }
@@ -82,6 +95,26 @@ fun EventDetailScreen(
                     .height(450.dp)
                     .background(Color(0xFF2A3140))
             ) {
+                if (!event?.imageUrl.isNullOrBlank()) {
+                    SubcomposeAsyncImage(
+                        model = event.imageUrl,
+                        contentDescription = event.title,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize(),
+                        loading = {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator(
+                                    color = cyanAccent,
+                                    modifier = Modifier.size(36.dp),
+                                    strokeWidth = 3.dp
+                                )
+                            }
+                        }
+                    )
+                }
 
                 Box(
                     modifier = Modifier
@@ -148,36 +181,46 @@ fun EventDetailScreen(
                             .background(Color.Black.copy(alpha = 0.3f))
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     ) {
-                        Text(stringResource(Res.string.event_seller_format, "Steve Halama"), color = Color.White, fontSize = 12.sp)
+                        Text(stringResource(Res.string.event_seller_format, "TicketMaster"), color = Color.White, fontSize = 12.sp)
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null, tint = Color.White, modifier = Modifier.size(12.dp))
                     }
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    Text("Night Pulse\nConcert", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.ExtraBold, lineHeight = 36.sp)
+                    Text(
+                        text = event?.title.orEmpty(),
+                        color = Color.White,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        lineHeight = 36.sp
+                    )
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.CalendarToday, contentDescription = null, tint = cyanAccent, modifier = Modifier.size(14.dp))
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text("August 14 • 9 PM", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    val formattedDate = listOfNotNull(event?.date, event?.time).filter { it.isNotBlank() }.joinToString(" • ")
+                    if (formattedDate.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.CalendarToday, contentDescription = null, tint = cyanAccent, modifier = Modifier.size(14.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(formattedDate, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        }
                     }
 
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.LocationOn, contentDescription = null, tint = cyanAccent, modifier = Modifier.size(14.dp))
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text("Austin, Texas", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                    val locationText = listOfNotNull(event?.address?.city, event?.address?.country).filter { it.isNotBlank() }.joinToString(", ")
+                    if (locationText.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(Icons.Default.LocationOn, contentDescription = null, tint = cyanAccent, modifier = Modifier.size(14.dp))
+                                Spacer(modifier = Modifier.width(6.dp))
+                                Text(locationText, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                            }
+                            Text(stringResource(Res.string.event_view_map), color = textGray, fontSize = 12.sp)
                         }
-                        Text(stringResource(Res.string.event_view_map), color = textGray, fontSize = 12.sp)
                     }
                 }
             }
@@ -188,14 +231,15 @@ fun EventDetailScreen(
                     .background(darkBackground)
                     .padding(horizontal = 24.dp)
             ) {
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "The Night Pulse Concert is certainly the biggest concert in all of texas at this time of the year featuring the legends of rock music. Do not miss your shot at this concert.",
-                    color = textGray,
-                    fontSize = 13.sp,
-                    lineHeight = 20.sp
-                )
+                if (!event?.description.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = event.description,
+                        color = textGray,
+                        fontSize = 13.sp,
+                        lineHeight = 20.sp
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -228,53 +272,79 @@ fun EventDetailScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                Text(stringResource(Res.string.event_ticket_types), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(stringResource(Res.string.event_tickets), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                TicketTypeCard("Standard", "$40", "Board communication\nDetails • $40", cyanAccent, surfaceColor, textGray)
-                Spacer(modifier = Modifier.height(12.dp))
-                TicketTypeCard("VIP", "$120", "Front row access\nDetails • $120", cyanAccent, surfaceColor, textGray)
+                val sortedTickets = dynamicTicketTypes.sortedBy { it.price }
 
-                Spacer(modifier = Modifier.height(100.dp)) // Sticky bottom bar için boşluk
+                if (sortedTickets.isNotEmpty()) {
+                    sortedTickets.forEach { ticket ->
+                        TicketTypeCard(
+                            title = ticket.name,
+                            price = "$${ticket.price}",
+                            accentColor = cyanAccent,
+                            surfaceColor = surfaceColor
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                } else if (uiState.isLoadingTickets) {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = cyanAccent, modifier = Modifier.size(24.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(100.dp))
             }
         }
     }
 }
 
 @Composable
-fun TicketTypeCard(title: String, price: String, details: String, accentColor: Color, surfaceColor: Color, textGray: Color) {
+fun TicketTypeCard(
+    title: String,
+    price: String,
+    accentColor: Color,
+    surfaceColor: Color,
+    onAddClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(surfaceColor)
-            .padding(12.dp),
+            .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
+                .width(80.dp)
+                .height(48.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color(0xFF2A3140)),
             contentAlignment = Alignment.Center
         ) {
-            Text(price, color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+            Text(price, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(details, color = textGray, fontSize = 12.sp, lineHeight = 16.sp)
-        }
+        Text(
+            text = title,
+            color = Color.White,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f)
+        )
 
         Box(
             modifier = Modifier
                 .size(36.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(accentColor)
-                .clickable { /* Sepete Ekle */ },
+                .clickable { onAddClick() },
             contentAlignment = Alignment.Center
         ) {
             Icon(Icons.Default.Add, contentDescription = "Add", tint = Color(0xFF14171D))

@@ -1,6 +1,8 @@
 package org.example.ticketmaster.data.remote.dto
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 import org.example.ticketmaster.domain.model.Address
 import org.example.ticketmaster.domain.model.Event
 import org.example.ticketmaster.domain.model.EventType
@@ -20,6 +22,7 @@ data class TicketTypeResponse(
     val price: Double
 )
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class EventResponse(
     val id: String,
@@ -30,6 +33,7 @@ data class EventResponse(
     val description: String,
     val capacity: Int,
     val address: AddressResponse,
+    @JsonNames("ImageUrl", "imageUrl", "image_url", "image", "Image")
     val imageUrl: String? = null,
     val ticketTypes: List<TicketTypeResponse>? = null
 )
@@ -47,7 +51,7 @@ fun EventResponse.toDomain(): Event {
             country = this.address.country,
             fullAddress = this.address.fullAddress
         ),
-        imageUrl = this.imageUrl,
+        imageUrl = this.imageUrl?.takeIf { it.isNotBlank() },
         ticketTypes = this.ticketTypes?.map {
             TicketType(
                 id = it.id,

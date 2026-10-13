@@ -265,7 +265,7 @@ fun SecurityStep(
         Spacer(modifier = Modifier.height(40.dp))
 
         val buttonWidth by animateDpAsState(
-            targetValue = if (isSuccess || isLoading) 52.dp else 400.dp, // Ortalama ekran genisligi
+            targetValue = if (isSuccess || isLoading) 52.dp else 400.dp,
             animationSpec = tween(durationMillis = 300)
         )
 

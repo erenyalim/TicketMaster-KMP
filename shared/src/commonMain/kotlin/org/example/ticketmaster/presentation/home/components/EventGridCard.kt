@@ -15,35 +15,67 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.SubcomposeAsyncImage
 import org.jetbrains.compose.resources.stringResource
 import ticketmaster.shared.generated.resources.Res
 import ticketmaster.shared.generated.resources.get_ticket
+import ticketmaster.shared.generated.resources.starting_price
 
 @Composable
 fun EventGridCard(
     event: org.example.ticketmaster.domain.model.Event,
     modifier: Modifier = Modifier,
-    onEventClick: () -> Unit
+    onEventClick: (org.example.ticketmaster.domain.model.Event) -> Unit
 ) {
     val cyanAccent = Color(0xFF00E5FF)
     val textGray = Color(0xFFA0A4AB)
     val cardBackground = Color(0xFF1E232E)
+
+    val minPrice = event.startingPrice
+    val priceFormatted = if (minPrice > 0) {
+        if (minPrice % 1.0 == 0.0) minPrice.toInt().toString() else minPrice.toString()
+    } else {
+        "0"
+    }
 
     Box(
         modifier = modifier
             .height(260.dp)
             .clip(RoundedCornerShape(20.dp))
             .background(cardBackground)
-            .clickable { onEventClick() }
+            .clickable { onEventClick(event) }
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF2A3140))
-        )
+                .background(Color(0xFF2A3140)),
+            contentAlignment = Alignment.Center
+        ) {
+            if (!event.imageUrl.isNullOrBlank()) {
+                SubcomposeAsyncImage(
+                    model = event.imageUrl,
+                    contentDescription = event.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize(),
+                    loading = {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                color = cyanAccent,
+                                modifier = Modifier.size(24.dp),
+                                strokeWidth = 2.dp
+                            )
+                        }
+                    }
+                )
+            }
+        }
 
         Box(
             modifier = Modifier
@@ -68,7 +100,12 @@ fun EventGridCard(
                 .padding(horizontal = 10.dp, vertical = 4.dp)
                 .align(Alignment.TopStart)
         ) {
-            Text("Type: ${event.type.name}", color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(Res.string.starting_price, priceFormatted),
+                color = Color.White,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
         Icon(
@@ -113,7 +150,7 @@ fun EventGridCard(
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = onEventClick,
+                onClick = { onEventClick(event) },
                 colors = ButtonDefaults.buttonColors(containerColor = cyanAccent),
                 modifier = Modifier
                     .fillMaxWidth()

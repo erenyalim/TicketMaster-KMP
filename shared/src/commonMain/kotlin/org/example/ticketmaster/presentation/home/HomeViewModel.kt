@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.example.ticketmaster.domain.model.Event
 import org.example.ticketmaster.domain.repository.EventRepository
+import org.example.ticketmaster.domain.usecase.GetTicketTypesUseCase
 
 data class HomeUiState(
     val searchText: String = "",
@@ -21,7 +22,10 @@ data class HomeUiState(
     val error: String? = null
 )
 
-class HomeViewModel(private val repository: EventRepository) : ViewModel() {
+class HomeViewModel(
+    private val repository: EventRepository,
+    private val getTicketTypesUseCase: GetTicketTypesUseCase
+) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -34,8 +38,19 @@ class HomeViewModel(private val repository: EventRepository) : ViewModel() {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
                 val events = repository.getFeaturedEvents()
+
+                val eventsWithTickets = events.map { event ->
+                    if (event.ticketTypes.isEmpty()) {
+                        val ticketsResult = getTicketTypesUseCase(event.id)
+                        val tickets = ticketsResult.getOrDefault(emptyList())
+                        event.copy(ticketTypes = tickets)
+                    } else {
+                        event
+                    }
+                }
+
                 _uiState.value = _uiState.value.copy(
-                    featuredEvents = events,
+                    featuredEvents = eventsWithTickets,
                     isLoading = false
                 )
             } catch (e: Exception) {

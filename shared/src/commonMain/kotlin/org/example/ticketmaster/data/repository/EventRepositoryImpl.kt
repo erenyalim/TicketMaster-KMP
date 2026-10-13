@@ -5,10 +5,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import org.example.ticketmaster.data.remote.dto.EventResponse
 import org.example.ticketmaster.data.remote.dto.toDomain
-import org.example.ticketmaster.domain.model.Address
 import org.example.ticketmaster.domain.model.Event
-import org.example.ticketmaster.domain.model.EventType
-import org.example.ticketmaster.domain.model.TicketType
 import org.example.ticketmaster.domain.repository.EventRepository
 
 class EventRepositoryImpl(
@@ -18,8 +15,9 @@ class EventRepositoryImpl(
     override suspend fun getFeaturedEvents(): List<Event> {
         return try {
             val response: List<EventResponse> = httpClient
-                .get("http://10.0.2.2:5000/api/events")
+                .get("http://10.0.2.2:5278/api/events")
                 .body()
+
 
             response.map { it.toDomain() }
 

@@ -17,7 +17,7 @@ import org.koin.compose.koinInject
 @Composable
 fun MainScreen(
     onNavigateToNotifications: () -> Unit,
-    onEventClick: () -> Unit,
+    onEventClick: (org.example.ticketmaster.domain.model.Event) -> Unit,
     viewModel: HomeViewModel = koinInject()
 ) {
     var selectedTab by remember { mutableStateOf(0) }

@@ -72,6 +72,7 @@
     <string name="event_view_map">View on Map</string>
     <string name="event_friends_attending">Friends Attending</string>
     <string name="event_ticket_types">Ticket Types</string>
+    <string name="event_tickets">Tickets</string>
 
     <string name="notifications_title">Notifications</string>
     <string name="notifications_ticket_purchase">Ticket Purchase</string>

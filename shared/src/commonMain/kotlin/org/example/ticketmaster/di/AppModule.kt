@@ -6,10 +6,14 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.example.ticketmaster.data.repository.AuthRepositoryImpl
 import org.example.ticketmaster.data.repository.EventRepositoryImpl
+import org.example.ticketmaster.data.repository.TicketRepositoryImpl
 import org.example.ticketmaster.domain.repository.AuthRepository
 import org.example.ticketmaster.domain.repository.EventRepository
+import org.example.ticketmaster.domain.repository.TicketRepository
+import org.example.ticketmaster.domain.usecase.GetTicketTypesUseCase
 import org.example.ticketmaster.domain.usecase.LoginUseCase
 import org.example.ticketmaster.domain.usecase.RegisterUseCase
+import org.example.ticketmaster.presentation.detail.EventDetailViewModel
 import org.example.ticketmaster.presentation.home.HomeViewModel
 import org.example.ticketmaster.presentation.login.LoginViewModel
 import org.example.ticketmaster.presentation.register.RegisterViewModel
@@ -35,7 +39,10 @@ var appModule = module {
     factory { RegisterViewModel(get()) }
 
     single<EventRepository> { EventRepositoryImpl(get()) }
-    factory { HomeViewModel(get()) }
+    single<TicketRepository> { TicketRepositoryImpl(get()) }
+    factory { GetTicketTypesUseCase(get()) }
+    factory { HomeViewModel(get(), get()) }
+    factory { EventDetailViewModel(get()) }
 }
 
 fun initKoin() {
