@@ -2,10 +2,12 @@ package org.example.ticketmaster.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.example.ticketmaster.domain.model.Banner
 import org.example.ticketmaster.domain.model.Event
 import org.example.ticketmaster.domain.repository.EventRepository
 import org.example.ticketmaster.domain.usecase.GetTicketTypesUseCase
@@ -16,7 +18,7 @@ data class HomeUiState(
     val selectedCity: String = "Istanbul",
     val selectedDate: String = "This Weekend",
     val selectedCategory: String = "Music",
-    val banners: List<String> = emptyList(),
+    val banners: List<Banner> = emptyList(),
     val featuredEvents: List<Event> = emptyList(),
     val isLoading: Boolean = false,
     val error: String? = null
@@ -37,7 +39,11 @@ class HomeViewModel(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             try {
-                val events = repository.getFeaturedEvents()
+                val eventsDeferred = async { repository.getFeaturedEvents() }
+                val bannersDeferred = async { repository.getBanners() }
+
+                val events = eventsDeferred.await()
+                val banners = bannersDeferred.await()
 
                 val eventsWithTickets = events.map { event ->
                     if (event.ticketTypes.isEmpty()) {
@@ -51,6 +57,7 @@ class HomeViewModel(
 
                 _uiState.value = _uiState.value.copy(
                     featuredEvents = eventsWithTickets,
+                    banners = banners,
                     isLoading = false
                 )
             } catch (e: Exception) {

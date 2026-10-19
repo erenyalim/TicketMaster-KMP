@@ -16,6 +16,7 @@ import org.example.ticketmaster.domain.usecase.RegisterUseCase
 import org.example.ticketmaster.presentation.detail.EventDetailViewModel
 import org.example.ticketmaster.presentation.home.HomeViewModel
 import org.example.ticketmaster.presentation.login.LoginViewModel
+import org.example.ticketmaster.presentation.profile.ProfileViewModel
 import org.example.ticketmaster.presentation.register.RegisterViewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -37,6 +38,7 @@ var appModule = module {
     factory { RegisterUseCase(get()) }
     factory { LoginViewModel(get()) }
     factory { RegisterViewModel(get()) }
+    factory { ProfileViewModel(get()) }
 
     single<EventRepository> { EventRepositoryImpl(get()) }
     single<TicketRepository> { TicketRepositoryImpl(get()) }

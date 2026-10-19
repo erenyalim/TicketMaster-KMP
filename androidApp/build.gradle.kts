@@ -17,10 +17,9 @@ dependencies {
 
     implementation(libs.compose.uiToolingPreview)
     debugImplementation(libs.compose.uiTooling)
-    implementation("androidx.core:core-splashscreen:1.0.1")
 
-    implementation("com.google.android.gms:play-services-location:21.4.0")
-    implementation("io.insert-koin:koin-android:3.5.6")
+    implementation(libs.googleLocation)
+    implementation(libs.koinAndroidApp)
 }
 
 android {
@@ -41,7 +40,8 @@ android {
     }
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -102,4 +102,8 @@
 
     <string name="profile_sec_data">Data &amp; Privacy (KVKK)</string>
     <string name="profile_download_data">Download My Data</string>
+    <string name="profile_guest_title">Guest User</string>
+    <string name="profile_guest_subtitle">Sign in to access all features and your tickets</string>
+    <string name="profile_login_or_register">Sign In / Register</string>
+    <string name="profile_login_action">Sign In</string>
 </resources>

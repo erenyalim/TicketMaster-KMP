@@ -151,7 +151,7 @@ fun HomeScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(28.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         ExploreBoxSection(
             uiState = uiState,
@@ -159,11 +159,30 @@ fun HomeScreen(
             onFilterClicked = { showFilterSheet = true }
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-        BannerSection(banners = uiState.banners)
+        BannerSection(
+            banners = uiState.banners,
+            onBannerClick = { banner ->
+                banner.eventId?.takeIf { it.isNotBlank() }?.let { eventId ->
+                    val event = uiState.featuredEvents.find { it.id == eventId }
+                        ?: org.example.ticketmaster.domain.model.Event(
+                            id = eventId,
+                            title = banner.title,
+                            type = org.example.ticketmaster.domain.model.EventType.KONSER,
+                            date = "",
+                            time = "",
+                            description = "",
+                            capacity = 0,
+                            address = org.example.ticketmaster.domain.model.Address("", "", ""),
+                            imageUrl = banner.formattedImageUrl
+                        )
+                    onEventClick(event)
+                }
+            }
+        )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         FeaturedEventsSection(
             events = uiState.featuredEvents,

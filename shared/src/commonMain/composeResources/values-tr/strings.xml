@@ -104,4 +104,8 @@
 
     <string name="profile_sec_data">Veri ve Hesap (KVKK)</string>
     <string name="profile_download_data">Verilerimi İndir</string>
+    <string name="profile_guest_title">Misafir Kullanıcı</string>
+    <string name="profile_guest_subtitle">Giriş yaparak tüm özelliklere ve biletlerinize erişin</string>
+    <string name="profile_login_or_register">Giriş Yap / Kayıt Ol</string>
+    <string name="profile_login_action">Giriş Yap</string>
 </resources>

@@ -7,18 +7,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.network.ktor3.KtorNetworkFetcherFactory
 import org.example.ticketmaster.presentation.detail.EventDetailScreen
 import org.example.ticketmaster.presentation.login.LoginScreen
 import org.example.ticketmaster.presentation.login.LoginViewModel
 import org.example.ticketmaster.presentation.main.MainScreen
+import org.example.ticketmaster.presentation.notifications.NotificationsScreen
 import org.example.ticketmaster.presentation.register.RegisterScreen
 import org.example.ticketmaster.presentation.register.RegisterViewModel
-import org.example.ticketmaster.presentation.notifications.NotificationsScreen
 import org.koin.compose.getKoin
-import coil3.ImageLoader
-import coil3.compose.setSingletonImageLoaderFactory
-import coil3.network.ktor3.KtorNetworkFetcherFactory
-
 
 @Composable
 fun App() {
@@ -43,6 +42,9 @@ fun App() {
                     onNavigateToNotifications = {
                         navController.navigate("notifications")
                     },
+                    onNavigateToLogin = {
+                        navController.navigate("login")
+                    },
                     onEventClick = { event ->
                         selectedEvent = event
                         navController.navigate("event_detail")
@@ -66,36 +68,44 @@ fun App() {
                     }
                 )
             }
-                composable("notifications") {
-                    NotificationsScreen(
-                        notifications = emptyList(), // TODO: Bu listeyi NotificationViewModel'dan çekilecek
-                        onBackClicked = {
-                            navController.popBackStack()
+            composable("notifications") {
+                NotificationsScreen(
+                    notifications = emptyList(),
+                    onBackClicked = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable("login") {
+                val koin = getKoin()
+                val loginViewModel = viewModel { koin.get<LoginViewModel>() }
+                LoginScreen(
+                    viewModel = loginViewModel,
+                    onLoginSuccess = {
+                        navController.navigate("main") {
+                            popUpTo("main") { inclusive = true }
                         }
-                    )
-                }
-                composable("login") {
-                    val koin = getKoin()
-                    val loginViewModel = viewModel { koin.get<LoginViewModel>() }
-                    LoginScreen(
-                        viewModel = loginViewModel,
-                        onNavigateToRegister = {
-                            navController.navigate("register")
-                        }
-                  )
-                }
-                composable("register") {
-                    val koin = getKoin()
-                    val registerViewModel = viewModel { koin.get<RegisterViewModel>() }
-                    RegisterScreen(
-                        viewModel = registerViewModel,
-                        onNavigateBack = {
-                            navController.popBackStack()
-                        }
-                    )
-                }
+                    },
+                    onNavigateToRegister = {
+                        navController.navigate("register")
+                    },
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable("register") {
+                val koin = getKoin()
+                val registerViewModel = viewModel { koin.get<RegisterViewModel>() }
+                RegisterScreen(
+                    viewModel = registerViewModel,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
+    }
 }
 
 @Preview

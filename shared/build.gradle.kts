@@ -55,14 +55,14 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.compose.uiTooling)
             implementation(libs.ktor.client.android)
-            
 
-            implementation("com.google.android.gms:play-services-location:21.3.0")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
-            implementation("io.insert-koin:koin-android:3.5.3")
-            implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0")
+            implementation(libs.googleLocation)
+            implementation(libs.kotlinxCoroutinesPlayServices)
+            implementation(libs.koinAndroidApp)
+            implementation(libs.coilNetworkOkhttp)
         }
         val iosMain by creating {
+            dependsOn(commonMain.get())
             dependencies {
                 implementation(libs.ktor.client.darwin)
             }
@@ -102,11 +102,6 @@ kotlin {
 
             //Icons
             implementation(compose.materialIconsExtended)
-
-            //Splash Screen
-            implementation("androidx.core:core-splashscreen:1.0.1")
-
-
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -2,9 +2,12 @@ package org.example.ticketmaster.presentation.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,56 +26,78 @@ import org.jetbrains.compose.resources.stringResource
 import ticketmaster.shared.generated.resources.Res
 import ticketmaster.shared.generated.resources.tm_logo
 import ticketmaster.shared.generated.resources.*
-import androidx.compose.foundation.clickable
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
-
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    onNavigateBack: (() -> Unit)? = null
+) {
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
     val status by viewModel.loginStatus.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    val DarkBackground = Color(0xFF161618)
-    val CyanColor = Color(0xFF00E5FF)
-    val DarkInputBox = Color(0xFF252525)
-    val LightGray = Color(0xFFA0A0A0)
+    val darkBackground = Color(0xFF161618)
+    val cyanColor = Color(0xFF00E5FF)
+    val darkInputBox = Color(0xFF252525)
+    val lightGray = Color(0xFFA0A0A0)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(DarkBackground)
+            .background(darkBackground)
+            .statusBarsPadding()
             .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (onNavigateBack != null) {
+                IconButton(onClick = onNavigateBack) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Geri",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Image(
             painter = painterResource(Res.drawable.tm_logo),
             contentDescription = "TicketMaster Logo",
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .height(80.dp)
                 .padding(bottom = 16.dp),
             contentScale = ContentScale.Fit
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = viewModel::onEmailChange,
-            placeholder = { Text(stringResource(Res.string.login_email_hint), color = LightGray) },
+            placeholder = { Text(stringResource(Res.string.login_email_hint), color = lightGray) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = DarkInputBox,
-                unfocusedContainerColor = DarkInputBox,
-                focusedBorderColor = CyanColor,
+                focusedContainerColor = darkInputBox,
+                unfocusedContainerColor = darkInputBox,
+                focusedBorderColor = cyanColor,
                 unfocusedBorderColor = Color.Transparent,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
-                cursorColor = CyanColor
+                cursorColor = cyanColor
             ),
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -86,17 +111,17 @@ fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
         OutlinedTextField(
             value = password,
             onValueChange = viewModel::onPasswordChange,
-            placeholder = { Text(stringResource(Res.string.login_password_hint), color = LightGray) },
+            placeholder = { Text(stringResource(Res.string.login_password_hint), color = lightGray) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = DarkInputBox,
-                unfocusedContainerColor = DarkInputBox,
-                focusedBorderColor = CyanColor,
+                focusedContainerColor = darkInputBox,
+                unfocusedContainerColor = darkInputBox,
+                focusedBorderColor = cyanColor,
                 unfocusedBorderColor = Color.Transparent,
                 focusedTextColor = Color.White,
                 unfocusedTextColor = Color.White,
-                cursorColor = CyanColor
+                cursorColor = cyanColor
             ),
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -113,25 +138,43 @@ fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = stringResource(Res.string.login_forgot_password), color = CyanColor, fontSize = 14.sp)
+            Text(text = stringResource(Res.string.login_forgot_password), color = cyanColor, fontSize = 14.sp)
+        }
+
+        if (status.isNotEmpty() && !status.contains("Giriş yapılıyor")) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = status,
+                color = if (status.contains("Başarılı")) Color.Green else Color.Red,
+                fontSize = 14.sp
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = { coroutineScope.launch { viewModel.login() } },
+            onClick = {
+                coroutineScope.launch {
+                    viewModel.login(onSuccess = onLoginSuccess)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = CyanColor),
-            shape = RoundedCornerShape(26.dp)
+            colors = ButtonDefaults.buttonColors(containerColor = cyanColor),
+            shape = RoundedCornerShape(26.dp),
+            enabled = !isLoading
         ) {
-            Text(
-                text = stringResource(Res.string.login_button),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
+            if (isLoading) {
+                CircularProgressIndicator(color = Color.Black, modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+            } else {
+                Text(
+                    text = stringResource(Res.string.login_button),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -141,14 +184,19 @@ fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
         ) {
             Text(
                 text = stringResource(Res.string.login_no_account),
-                color = LightGray,
-                fontSize = 14.sp)
+                color = lightGray,
+                fontSize = 14.sp
+            )
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = stringResource(Res.string.login_register),
-                color = CyanColor,
+                color = cyanColor,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { onNavigateToRegister() })
+                modifier = Modifier.clickable { onNavigateToRegister() }
+            )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
     }
 }

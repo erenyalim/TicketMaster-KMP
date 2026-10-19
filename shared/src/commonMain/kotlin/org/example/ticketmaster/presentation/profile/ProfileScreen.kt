@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,12 +33,112 @@ import ticketmaster.shared.generated.resources.*
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    ProfileScreen(
+        uiState = ProfileUiState(),
+        onNavigateToLogin = {},
+        onLogoutClick = {}
+    )
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    uiState: ProfileUiState = ProfileUiState(),
+    onNavigateToLogin: () -> Unit = {},
+    onLogoutClick: () -> Unit = {}
+) {
+    if (!uiState.isLoggedIn) {
+        GuestProfileView(onNavigateToLogin = onNavigateToLogin)
+    } else {
+        LoggedInProfileView(
+            uiState = uiState,
+            onLogoutClick = onLogoutClick
+        )
+    }
+}
+
+@Composable
+private fun GuestProfileView(
+    onNavigateToLogin: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF14171D))
+            .statusBarsPadding()
+            .padding(24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(32.dp))
+                .background(Color(0xFF1C2129))
+                .padding(32.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(96.dp)
+                    .clip(CircleShape)
+                    .background(Color(0xFF292E37)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    contentDescription = "Profile",
+                    tint = Color(0xFF00E5FF),
+                    modifier = Modifier.size(48.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = stringResource(Res.string.profile_guest_title),
+                color = Color.White,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = stringResource(Res.string.profile_guest_subtitle),
+                color = Color.Gray,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = onNavigateToLogin,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00E5FF)),
+                shape = RoundedCornerShape(26.dp)
+            ) {
+                Text(
+                    text = stringResource(Res.string.profile_login_or_register),
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun LoggedInProfileView(
+    uiState: ProfileUiState,
+    onLogoutClick: () -> Unit
+) {
     val scrollState = rememberScrollState()
+    val user = uiState.user
 
     Column(
         modifier = Modifier
@@ -74,28 +177,33 @@ fun ProfileScreen() {
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Eren Yalım",
+                    text = user?.fullName?.ifEmpty { "Kullanıcı" } ?: "Kullanıcı",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "eren@example.com",
+                    text = user?.email ?: "",
                     color = Color.Gray,
                     fontSize = 14.sp
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                
+
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .clickable { /* TODO: Düzenle */ }
+                        .clickable {}
                         .padding(vertical = 4.dp, horizontal = 8.dp)
                         .offset(x = (-8).dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(Icons.Default.Edit, contentDescription = null, tint = Color(0xFF00E5FF), modifier = Modifier.size(14.dp))
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = null,
+                        tint = Color(0xFF00E5FF),
+                        modifier = Modifier.size(14.dp)
+                    )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = stringResource(Res.string.profile_edit_profile),
@@ -111,7 +219,7 @@ fun ProfileScreen() {
                     .size(40.dp)
                     .clip(CircleShape)
                     .background(Color(0xFF292E37))
-                    .clickable { /* TODO: Change Language logic */ },
+                    .clickable {},
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -159,10 +267,22 @@ fun ProfileScreen() {
                     .background(Color(0xFF1C2129))
                     .padding(8.dp)
             ) {
-                ProfileMenuItem(icon = Icons.Default.Email, title = stringResource(Res.string.profile_contact_info))
-                ProfileMenuItem(icon = Icons.Default.Lock, title = stringResource(Res.string.profile_change_password))
-                ProfileMenuItem(icon = Icons.Default.Security, title = stringResource(Res.string.profile_2fa))
-                ProfileMenuItem(icon = Icons.Default.Devices, title = stringResource(Res.string.profile_active_sessions))
+                ProfileMenuItem(
+                    icon = Icons.Default.Email,
+                    title = stringResource(Res.string.profile_contact_info)
+                )
+                ProfileMenuItem(
+                    icon = Icons.Default.Lock,
+                    title = stringResource(Res.string.profile_change_password)
+                )
+                ProfileMenuItem(
+                    icon = Icons.Default.Security,
+                    title = stringResource(Res.string.profile_2fa)
+                )
+                ProfileMenuItem(
+                    icon = Icons.Default.Devices,
+                    title = stringResource(Res.string.profile_active_sessions)
+                )
             }
         }
 
@@ -181,12 +301,21 @@ fun ProfileScreen() {
                     .background(Color(0xFF1C2129))
                     .padding(8.dp)
             ) {
-                ProfileMenuItem(icon = Icons.Default.CreditCard, title = stringResource(Res.string.profile_saved_cards))
-                ProfileMenuItem(icon = Icons.Default.Description, title = stringResource(Res.string.profile_billing_info))
-                ProfileMenuItem(icon = Icons.Default.History, title = stringResource(Res.string.profile_payment_history))
+                ProfileMenuItem(
+                    icon = Icons.Default.CreditCard,
+                    title = stringResource(Res.string.profile_saved_cards)
+                )
+                ProfileMenuItem(
+                    icon = Icons.Default.Description,
+                    title = stringResource(Res.string.profile_billing_info)
+                )
+                ProfileMenuItem(
+                    icon = Icons.Default.History,
+                    title = stringResource(Res.string.profile_payment_history)
+                )
             }
         }
-        
+
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(Res.string.profile_sec_preferences),
@@ -252,7 +381,8 @@ fun ProfileScreen() {
                 ProfileMenuItem(
                     icon = Icons.AutoMirrored.Filled.ExitToApp,
                     title = stringResource(Res.string.profile_logout),
-                    contentColor = Color(0xFFFF4C4C)
+                    contentColor = Color(0xFFFF4C4C),
+                    onClick = onLogoutClick
                 )
                 ProfileMenuItem(
                     icon = Icons.Default.Delete,
@@ -270,13 +400,14 @@ fun ProfileScreen() {
 private fun ProfileCoreActionCard(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    title: String
+    title: String,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .background(Color(0xFF1C2129))
-            .clickable { /* Action */ }
+            .clickable { onClick() }
             .padding(vertical = 16.dp),
         contentAlignment = Alignment.Center
     ) {
